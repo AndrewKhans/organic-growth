@@ -1,3 +1,5 @@
+build/
+
 # Prerequisites
 *.d
 
@@ -51,3 +53,9 @@ Module.symvers
 Mkfile.old
 dkms.conf
 game
+.DS_Store
+README.md
+notes.md
+.vscode/settings.json
+gameplay-notes.md
+implementation-notes.md
