@@ -1,19 +1,40 @@
 #include "raylib.h"
+#include <vector>
 
-typedef struct {
-    unsigned char petalCount;
-    float petalLength;
-    Color petalColor;
+enum FlowerGrowthPhase {
+    SEEDLING,
+    LEAFY,
+    FLOWER
+};
 
-    unsigned int stemSegments;
-    float stemPieceSize;
-    Color stemColor;
+enum PlantPart {
+    AIR,
+    SEED,
+    STEM,
+    LEAF,
+    PETAL
+};
 
-    float seedHeadRadius;
-    Color seedHeadColor;
-} flower_t;
+class Flower {
+    public:
+        Flower(Vector2 loc);
 
-flower_t generateFlower();
+        void grow();
+        void draw();
 
-void drawFlower(Vector2 seedLoc, flower_t f);
+    private:
+        // Plant vars
+        Vector2 loc; // The center of the bottom of the plant, in graphics-coords
+        std::vector<std::vector<PlantPart>> plantArr; // Centered around loc. 0,0 is bottom left
+        unsigned int age = 0;
+        FlowerGrowthPhase growthPhase = SEEDLING;
+
+        // Where the flower is currently growing from
+        Vector2 growthPoint;
+
+        // Traits assigned at birth
+        Color petalColor;
+        Color stemColor;
+        int maxHeight;
+};
 

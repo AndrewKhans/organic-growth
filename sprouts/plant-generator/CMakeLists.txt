@@ -1,5 +1,5 @@
 # Copyright (c) 2013-2023 Ramon Santamaria (@raysan5)
-# Licensed under the zlib/libpng license (see LICENSE).
+# Licensed under the zlib/libpng license
 # Based on CMakeLists.txt template from Ramon
 # Modifications made by Andrew Khanschassoff
 
