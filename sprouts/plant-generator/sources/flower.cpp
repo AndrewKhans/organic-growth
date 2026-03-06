@@ -1,15 +1,22 @@
 #include "flower.h"
+// #include "constants.h"
 #include <iostream>
 #include <vector>
+#include <random>
 
+int randInt(int min, int max) {
+    static std::mt19937 rng(std::random_device{}());
+    std::uniform_int_distribution<int> dist(min, max);
+    return dist(rng);
+}
 
-Flower::Flower(Vector2 loc) {
+Flower::Flower(coordPair loc) {
     this->loc = loc;
-    growthPoint = loc;
 
-    plantArr.resize(10, std::vector<PlantPart>(10, AIR));
+    plantArr.resize(10, std::vector<plantPart>(50, AIR));
 
-    plantArr[0][5] = SEED;
+    plantArr[(int)plantArr.size()/2][0] = SEED;
+    growthPoint = {(int)plantArr.size()/2, 0};
 
     // Assign random birth traits
     // TODO: Make these random
@@ -27,19 +34,26 @@ Flower::Flower(Vector2 loc) {
 }
 
 void Flower::grow() {
-    std::cout << "\nFlower age: " << age << "\n";
+    std::cout << "Flower age: " << age << "\n";
 
     switch (growthPhase) {
         case SEEDLING:
-            std::cout << "Seedling grow\n";
-            if (age >= 10) growthPhase = LEAFY;
+            // std::cout << "Seedling grow\n";
+            if (age > 4) growthPhase = LEAFY;
             break;
         case LEAFY:
-            std::cout << "Leafy grow\n";
-            if (age >= 20) growthPhase = FLOWER;
+            // std::cout << "Leafy grow\n";
+            plantArr[growthPoint.x][growthPoint.y] = STEM;
+            growthPoint.y += 1;
+            if (randInt(0,4) == 0) {
+                int offset = randInt(0,1) == 0 ? 1 : -1;
+                growthPoint.x += offset;
+            }
+            if (age > 20) growthPhase = FLOWER;
             break;
         case FLOWER:
-            std::cout << "Flower grow\n";
+            // std::cout << "Flower grow\n";
+            plantArr[growthPoint.x][growthPoint.y] = PETAL;
             break;
     }
     age += 1;
@@ -47,17 +61,14 @@ void Flower::grow() {
 
 void Flower::draw() {
 
-    // Set drawHead to the graphics-coords location of (0,0) in plantArr
-    Vector2 drawHead = loc - (int)plantArr[0].size()/2
-
-    std::cout << "Drawing flower\n";
-    for (const std::vector<PlantPart>& row : plantArr) {
-        for (const PlantPart part : row) {
-            drawHead.x += 1;
-            if (part == AIR) continue;
+    for (unsigned int arr_y = 0; arr_y < plantArr[0].size(); arr_y++) {
+        for (unsigned int arr_x = 0; arr_x < plantArr.size(); arr_x++) {
+            plantPart p = plantArr[arr_x][arr_y];
+            if (p == AIR) continue;
 
             Color c;
-            switch (part) {
+            switch (p) {
+                case AIR: break;
                 case SEED:
                     c = BROWN;
                     break;
@@ -65,16 +76,21 @@ void Flower::draw() {
                     c = stemColor;
                     break;
                 case LEAF:
-                    c = leafColor;
+                case LEAFBASE:
+                    c = stemColor;
+                    break;
+                case PETALBASE:
+                    c = BROWN;
                     break;
                 case PETAL:
                     c = petalColor;
                     break;
             }
-            DrawRectangleV(drawHead, stemPiece, f.stemColor);
 
+            int x = loc.x + (arr_x-(int)plantArr.size()/2)*PIXEL_SIZE;
+            int y = loc.y - arr_y*PIXEL_SIZE;
+            DrawRectangle(x, y, PIXEL_SIZE, PIXEL_SIZE, c);
         }
-        drawHead.y += 1;
     }
 }
 

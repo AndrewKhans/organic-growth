@@ -1,40 +1,45 @@
+#pragma once
+
 #include "raylib.h"
+#include "constants.h"
 #include <vector>
 
-enum FlowerGrowthPhase {
+enum flowerGrowthPhase {
     SEEDLING,
     LEAFY,
-    FLOWER
+    FLOWER,
 };
 
-enum PlantPart {
+enum plantPart {
     AIR,
     SEED,
     STEM,
+    LEAFBASE,
     LEAF,
-    PETAL
+    PETALBASE,
+    PETAL,
 };
 
 class Flower {
     public:
-        Flower(Vector2 loc);
+        Flower(coordPair loc);
 
         void grow();
         void draw();
 
     private:
         // Plant vars
-        Vector2 loc; // The center of the bottom of the plant, in graphics-coords
-        std::vector<std::vector<PlantPart>> plantArr; // Centered around loc. 0,0 is bottom left
+        coordPair loc; // The center of the bottom of the plant, in graphics-coords
+        std::vector<std::vector<plantPart>> plantArr; // Centered around loc. 0,0 is bottom left
         unsigned int age = 0;
-        FlowerGrowthPhase growthPhase = SEEDLING;
+        flowerGrowthPhase growthPhase = SEEDLING;
 
         // Where the flower is currently growing from
-        Vector2 growthPoint;
+        coordPair growthPoint;
 
         // Traits assigned at birth
         Color petalColor;
         Color stemColor;
-        int maxHeight;
+        unsigned int maxHeight;
 };
 
