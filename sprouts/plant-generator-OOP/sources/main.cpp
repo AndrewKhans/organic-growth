@@ -1,36 +1,38 @@
 #include "raylib.h"
-#include "plant_system.h"
+#include "flower.h"
 #include "constants.h"
 #include <chrono>
 #include <thread>
 
-constexpr unsigned char NUM_PLANTS = 6;
 
 int main(void)
 {
+    coordPair seedLocation;
 
-    std::vector<Plant> plants;
+    seedLocation.x = WINDOW_SIZE_X/2;
+    seedLocation.y = WINDOW_SIZE_Y - 100;
 
-    int plantSpacing = WINDOW_SIZE_X/(NUM_PLANTS+1);
-    int xLocation = plantSpacing;
-    for (int i = 0; i < NUM_PLANTS; i++) {
-        plants.push_back(generateFlower({xLocation, WINDOW_SIZE_Y - 100}));
-        xLocation += plantSpacing;
-    }
+    Flower f(seedLocation);
 
     InitWindow(WINDOW_SIZE_X, WINDOW_SIZE_Y, "organic-growth");
 
+    unsigned int i = 0;
     while (!WindowShouldClose()) {
 
         // Game state updates
-        growPlants(plants);
+        f.grow();
 
+        i++;
+        if (i > 40) {
+            f = Flower(seedLocation);
+            i = 0;
+        }
 
         // Draw everything
         BeginDrawing();
 
             ClearBackground(RAYWHITE);
-            drawPlants(plants);
+            f.draw();
 
         EndDrawing();
 

@@ -45,6 +45,9 @@ void Flower::grow() {
             // std::cout << "Leafy grow\n";
             plantArr[growthPoint.x][growthPoint.y] = STEM;
             growthPoint.y += 1;
+
+            // Stem shift
+            // Todo: after a stem shift, do not stem shift on the next growth
             if (randInt(0,4) == 0) {
                 int offset = randInt(0,1) == 0 ? 1 : -1;
                 growthPoint.x += offset;
