@@ -4,7 +4,7 @@
 #include <chrono>
 #include <thread>
 
-constexpr unsigned char NUM_PLANTS = 6;
+constexpr unsigned char NUM_PLANTS = 4;
 
 int main(void)
 {

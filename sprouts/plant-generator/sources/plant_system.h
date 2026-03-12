@@ -33,7 +33,8 @@ typedef struct Plant {
     GrowthPhase growthPhase = SEEDLING;
     unsigned int age = 0;
 
-    std::vector<PlantPart> plantArr; // Centered around loc. 0,0 is bottom left
+    // Flattened 2D vector, 0,0 is the bottom left
+    std::vector<PlantPart> plantArr;
     unsigned int arrWidth = 60;
     unsigned int arrHeight = 60;
 

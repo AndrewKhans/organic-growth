@@ -22,11 +22,10 @@ Plant generateFlower(CoordPair seedLocation) {
     p.growthPoint = {(int)p.arrWidth/2, 0};
 
     // Assign random birth traits
-    // TODO: Make these random
-    p.petalColor.r = 60;
-    p.petalColor.g = 60;
-    p.petalColor.b = 120;
-    p.petalColor.a = 120;
+    p.petalColor.r = randInt(0,255);
+    p.petalColor.g = randInt(0,255);
+    p.petalColor.b = randInt(0,255);
+    p.petalColor.a = 255;
 
     p.stemColor.r = 30;
     p.stemColor.g = 120;
@@ -36,45 +35,58 @@ Plant generateFlower(CoordPair seedLocation) {
     return p;
 }
 
+void growFlower(Plant* p) {
+    switch (p->growthPhase) {
+        case SEEDLING:
+            if (p->age > 1 && randInt(0,4) == 0 ||
+                p->age > 6) {
+                    p->growthPhase = SPROUT;
+                    p->age = 0;
+                }
+            break;
+        case SPROUT:
+            p->plantArr[p->growthPoint.x + p->growthPoint.y*p->arrWidth] = STEM;
+            p->growthPoint.y += 1;
+
+            // Stem shift
+            if (p->growthPoint.y > 1 &&
+                p->plantArr[p->growthPoint.x + (p->growthPoint.y-1)*p->arrWidth] != AIR &&
+                p->plantArr[p->growthPoint.x + (p->growthPoint.y-2)*p->arrWidth] != AIR &&
+                randInt(0,6) == 0) {
+
+                int offset = randInt(0,1) == 0 ? 1 : -1;
+                p->growthPoint.x += offset;
+            }
+
+            if (p->age > 30 && randInt(0,3) == 0 ||
+                p->age > 40) {
+                    p->growthPhase = FLOWERING;
+                    p->age = 0;
+                }
+            break;
+        case FLOWERING:
+            p->plantArr[p->growthPoint.x + p->growthPoint.y*p->arrWidth] = PETAL;
+
+            // Need to apply a formula that fills in a circle shape
+            // x=rcos(theta) y=rsin(theta), theta increases each step and r increases each time
+            // we loop back around
+
+
+            if (p->age > 20 && randInt(0,3) == 0 ||
+                p->age > 40) {
+                    p->growthPhase = DORMANT;
+                    p->age = 0;
+                }
+            break;
+        case DORMANT:
+            // Regrow if needed
+            break;
+    }
+}
+
 void growPlants(std::vector<Plant> &plants) {
     for (auto& p : plants) {
-        switch (p.growthPhase) {
-
-            case SEEDLING:
-                if (p.age > 1 && randInt(0,4) == 0 ||
-                    p.age > 6) {
-                        p.growthPhase = SPROUT;
-                        p.age = 0;
-                    }
-                break;
-            case SPROUT:
-                p.plantArr[p.growthPoint.x + p.growthPoint.y*p.arrWidth] = STEM;
-                p.growthPoint.y += 1;
-
-                // Stem shift
-                if (p.growthPoint.y > 1 &&
-                    p.plantArr[p.growthPoint.x + (p.growthPoint.y-1)*p.arrWidth] != AIR &&
-                    p.plantArr[p.growthPoint.x + (p.growthPoint.y-2)*p.arrWidth] != AIR &&
-                    randInt(0,4) == 0) {
-
-                    int offset = randInt(0,1) == 0 ? 1 : -1;
-                    p.growthPoint.x += offset;
-                }
-
-                if (p.age > 5 && randInt(0,3) == 0 ||
-                    p.age > 15) {
-                        p.growthPhase = FLOWERING;
-                        p.age = 0;
-                    }
-                break;
-            case FLOWERING:
-                p.plantArr[p.growthPoint.x + p.growthPoint.y*p.arrWidth] = PETAL;
-                p.growthPhase = DORMANT;
-                break;
-            case DORMANT:
-                // Regrow if needed
-                break;
-        }
+        if (p.type == FLOWER) growFlower(&p);
         p.age += 1;
     }
 }
@@ -132,37 +144,4 @@ void drawPlants(std::vector<Plant> &plants) {
 //         petalCoords[i].y = f.seedHeadRadius * math.sin(angleBetweenPetals);
 
 //     }
-// }
-
-// void draw() {
-//     Vector2 stemPiece;
-//     Vector2 drawHead;
-
-//     stemPiece.x = f.stemPieceSize;
-//     stemPiece.y = f.stemPieceSize;
-
-//     drawHead.x = seedLoc.x;
-//     drawHead.y = seedLoc.y;
-
-//     // Draw Stem
-//     drawHead.x -= f.stemPieceSize/2; // center each stem piece above seed
-//     for (unsigned int i = 0; i < f.stemSegments; i++) {
-//         DrawRectangleV(drawHead, stemPiece, f.stemColor);
-//         drawHead.y -= f.stemPieceSize;
-//     }
-//     drawHead.x = seedLoc.x; // re-center drawhead over seed
-
-//     // Draw seed head
-//     DrawCircleV(drawHead, f.seedHeadRadius, f.seedHeadColor);
-
-//     // Draw petals
-
-//     // Find locations of petalCount points along seedHead
-
-//     // for (unsigned char i = 0; i < f.petalCount; i++) {
-//     //     DrawEllipse(drawHead.x, drawHead.y, f.petalLength, f.petalLength/2, f.petalColor);
-//     //     drawHead.x += 10;
-//     // }
-//     // RLAPI void DrawEllipse(int centerX, int centerY, float radiusH, float radiusV, Color color);             // Draw ellipse
-
 // }
