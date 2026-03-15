@@ -4,12 +4,12 @@
 #include "raylib.h"
 #include <vector>
 
-enum PlantType {
+enum class PlantType : uint8_t {
     FLOWER,
     TREE,
 };
 
-enum PlantPart {
+enum class PlantPart : uint8_t {
     AIR,
     SEED,
     STEM,
@@ -19,19 +19,23 @@ enum PlantPart {
     PETAL,
 };
 
-enum GrowthPhase {
-    SEEDLING,
+enum class GrowthPhase : uint8_t {
+    SEED,
     SPROUT,
+    BARKY,
     FLOWERING,
     DORMANT,
 };
+
 
 typedef struct Plant {
     PlantType type;
     CoordPair loc;         // The center of the bottom of the plant, in graphics-coords
     CoordPair growthPoint; // Where the plant is currently growing from
-    GrowthPhase growthPhase = SEEDLING;
-    unsigned int age = 0;
+
+
+    GrowthPhase growthPhase = GrowthPhase::SEED;
+    unsigned int growthPoints = 0;
 
     // Flattened 2D vector, 0,0 is the bottom left
     std::vector<PlantPart> plantArr;
