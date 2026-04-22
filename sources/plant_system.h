@@ -30,8 +30,8 @@ enum class GrowthPhase : uint8_t {
 
 typedef struct Plant {
     PlantType type;
-    CoordPair loc;         // The center of the bottom of the plant, in graphics-coords
-    CoordPair growthPoint; // Where the plant is currently growing from
+    Vector2 worldCoords; // The center of the bottom of the plant, in world coordinates
+    Vector2 growthPoint; // Where the plant is currently growing from
 
 
     GrowthPhase growthPhase = GrowthPhase::SEED;
@@ -47,6 +47,6 @@ typedef struct Plant {
     Color barkColor;
 } Plant;
 
-Plant generateFlower(CoordPair seedLocation);
+Plant generateFlower(Vector2 seedLocation);
 void growPlants(std::vector<Plant> &plants);
 void drawPlants(std::vector<Plant> &plants);

@@ -9,7 +9,7 @@ int randInt(int min, int max) {
     return dist(rng);
 }
 
-Plant generateFlower(CoordPair seedLocation) {
+Plant generateFlower(Vector2 seedLocation) {
     Plant p;
 
     p.type = PlantType::FLOWER;
@@ -34,7 +34,7 @@ Plant generateFlower(CoordPair seedLocation) {
     return p;
 }
 
-Plant generateTree(CoordPair seedLocation) {
+Plant generateTree(Vector2 seedLocation) {
     Plant p;
 
     p.type = PlantType::TREE;
