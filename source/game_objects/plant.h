@@ -4,16 +4,17 @@
 
 #include "constants.h"
 #include "raylib.h"
+#include <vector>
 
 constexpr unsigned int PLANT_ARR_WIDTH = 60;
 constexpr unsigned int PLANT_ARR_HEIGHT = 60;
 
-enum class PlantType : unsigned int {
+enum class PlantType : unsigned char {
     FLOWER,
     TREE,
 };
 
-enum class PlantPart : unsigned int {
+enum class PlantPart : unsigned char {
     AIR,
     SEED,
     STEM,
@@ -23,7 +24,7 @@ enum class PlantPart : unsigned int {
     PETAL,
 };
 
-enum class GrowthPhase : unsigned int {
+enum class GrowthPhase : unsigned char {
     SEED,
     SPROUT,
     BARKY,
@@ -40,10 +41,10 @@ typedef struct Plant {
     unsigned int growthPoints = 0;
 
     // Flattened 2D vector, 0,0 is the bottom left
-    std::array<PlantPart, PLANT_ARR_WIDTH*PLANT_ARR_HEIGHT> plantArr;
-    std::array<Color, PLANT_ARR_WIDTH*PLANT_ARR_HEIGHT> sprite;
+    std::vector<PlantPart> plantArr;
+    std::vector<Color> sprite;
 
     Color petalColor;
     Color stemColor;
     Color barkColor;
-} Plant;
+};

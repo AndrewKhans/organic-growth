@@ -47,16 +47,21 @@ void drawFrame() {
 
 int main(void)
 {
-    gameStateInit();
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "organic-growth");
+    SetTargetFPS(60);
+    gameStateInit();
+
+    double lastGrowthTick = 0.0;
+    const double growthInterval = 0.1; // seconds between growth steps
 
     while (!WindowShouldClose()) {
-        gameStateUpdates();
+        double now = GetTime();
+        if (now - lastGrowthTick >= growthInterval) {
+            gameStateUpdates();
+            lastGrowthTick = now;
+        }
         handleUserInput();
         drawFrame();
-
-        // Todo: Make this sleep based on how long it took the rest of the stuff to happen
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
     CloseWindow();

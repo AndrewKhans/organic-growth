@@ -8,9 +8,9 @@ Plant generatePlant(Vector2 worldCoords, PlantType pt) {
     p.type = pt;
     p.worldCoords = worldCoords;
 
-    p.plantArr.resize(p.arrWidth*p.arrHeight, PlantPart::AIR);
-    p.plantArr[p.arrWidth*0 + (int)p.arrWidth/2] = PlantPart::SEED;
-    p.growthLoc = {(int)p.arrWidth/2, 0};
+    p.plantArr.resize(PLANT_ARR_WIDTH*PLANT_ARR_HEIGHT, PlantPart::AIR);
+    p.plantArr[PLANT_ARR_WIDTH*0 + (int)PLANT_ARR_WIDTH/2] = PlantPart::SEED;
+    p.growthLoc = {(int)PLANT_ARR_WIDTH/2, 0};
 
     // Assign random birth traits
     p.stemColor.r = 30;
@@ -27,13 +27,13 @@ Plant generatePlant(Vector2 worldCoords, PlantType pt) {
 }
 
 void growSprout(Plant& p) {
-    p.plantArr[p.growthLoc.x + p.growthLoc.y*p.arrWidth] = PlantPart::STEM;
+    p.plantArr[p.growthLoc.x + p.growthLoc.y*PLANT_ARR_WIDTH] = PlantPart::STEM;
     p.growthLoc.y += 1;
 
     // Stem shift
     if (p.growthLoc.y > 1 &&
-        p.plantArr[p.growthLoc.x + (p.growthLoc.y-1)*p.arrWidth] != PlantPart::AIR &&
-        p.plantArr[p.growthLoc.x + (p.growthLoc.y-2)*p.arrWidth] != PlantPart::AIR &&
+        p.plantArr[p.growthLoc.x + (p.growthLoc.y-1)*PLANT_ARR_WIDTH] != PlantPart::AIR &&
+        p.plantArr[p.growthLoc.x + (p.growthLoc.y-2)*PLANT_ARR_WIDTH] != PlantPart::AIR &&
         randInt(0,6) == 0) {
 
         int offset = randInt(0,1) == 0 ? 1 : -1;
@@ -42,7 +42,7 @@ void growSprout(Plant& p) {
 }
 
 void growFlowering(Plant& p) {
-    p.plantArr[p.growthLoc.x + p.growthLoc.y*p.arrWidth] = PlantPart::PETAL;
+    p.plantArr[p.growthLoc.x + p.growthLoc.y*PLANT_ARR_WIDTH] = PlantPart::PETAL;
 }
 
 void growFlower(Plant& p) {
