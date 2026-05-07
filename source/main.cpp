@@ -2,7 +2,7 @@
 #include <thread>
 #include <iostream>
 
-#include "raylib/raylib.h"
+#include "raylib.h"
 #include "systems/plant_system.h"
 #include "systems/fish_system.h"
 #include "systems/render_system.h"
