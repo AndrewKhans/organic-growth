@@ -13,5 +13,6 @@ struct GameData {
     std::vector<FishBody> fishBodies;
     std::vector<PlantBody> plantBodies;
 
-    std::unordered_map<unsigned int, Sprite*> idToSprite; // consider replacing with sparse arrays for performance
+    // idToSpriteIdx[entity id] = index of corresponding sprite in sprites
+    // std::vector<unsigned int> idToSpriteIdx; // consider replacing with sparse arrays for performance
 };

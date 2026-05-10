@@ -27,5 +27,4 @@ void generateFish(Vector2 worldCoords, GameData gd){
 
     gd.fishBodies.push_back(fb);
     gd.sprites.push_back(s);
-    gd.idToSprite[id] = &s;
 }

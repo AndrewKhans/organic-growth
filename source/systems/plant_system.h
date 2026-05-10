@@ -6,6 +6,5 @@
 #include "raylib.h"
 
 
-void generatePlant(Vector2 worldCoords, PlantType pt, GameData gd);
-
-void growPlants(GameData gd);
+void generatePlant(Vector2 worldCoords, PlantType pt, GameData &gd);
+void growPlants(GameData &gd);

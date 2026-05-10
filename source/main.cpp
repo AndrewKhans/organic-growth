@@ -9,23 +9,18 @@
 #include "constants.h"
 #include "game_data.h"
 
-constexpr unsigned char NUM_PLANTS = 4;
+constexpr unsigned char NUM_PLANTS = 1;
 
-void gameStateInit(GameData gd) {
+void gameStateInit(GameData &gd) {
     int plantSpacing = WINDOW_WIDTH/(NUM_PLANTS+1);
     float xLocation = plantSpacing;
     for (int i = 0; i < NUM_PLANTS; i++) {
-        std::cout << "plant1\n";
         generatePlant({xLocation, WINDOW_HEIGHT - 100}, PlantType::FLOWER, gd);
         xLocation += plantSpacing;
     }
-
-    // playerFish = generateFish({(float)WINDOW_WIDTH/2, (float)WINDOW_HEIGHT/2});
-    // fish.push_back(playerFish);
-    std::cout << "finished\n";
 }
 
-void gameStateUpdates(GameData gd) {
+void gameStateUpdates(GameData &gd) {
     growPlants(gd);
 }
 
@@ -42,16 +37,14 @@ int main(void)
     SetTargetFPS(60);
 
     GameData gd;
-    std::cout << "GameStateInit\n";
     gameStateInit(gd);
 
     double lastTick = 0.0;
-    const double tickInterval = 0.1; // seconds between growth steps
+    const double tickInterval = 0.1; // seconds between each tick
 
     while (!WindowShouldClose()) {
         double now = GetTime();
         if (now - lastTick >= tickInterval) {
-            std::cout << "GameStateupdates\n";
             gameStateUpdates(gd);
             lastTick = now;
         }
