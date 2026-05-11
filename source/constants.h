@@ -11,9 +11,9 @@ constexpr unsigned int SCREEN_HEIGHT = 700;
 
 // Game constants
 
-struct CoordPair {
-    int x = 0;
-    int y = 0;
+struct uIntPair {
+    unsigned int x = 0;
+    unsigned int y = 0;
 };
 
 static inline int randInt(int min, int max) {

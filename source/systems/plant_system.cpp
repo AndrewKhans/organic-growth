@@ -33,7 +33,7 @@ void generatePlant(Vector2 worldCoords, PlantType pt, GameData &gd) {
     s.pixels.resize(s.width*s.height, BLANK);
     update(pb.width*0 + (int)pb.width/2, pb, s, PlantPart::SEED, BROWN);
 
-    pb.growthLoc = {(int)pb.width/2, 0};
+    pb.growthLoc = {(unsigned int)pb.width/2, 0};
 
     pb.stemColor = {30, 120, 60, 255};
     pb.petalColor.r = randInt(0,255);
@@ -46,7 +46,6 @@ void generatePlant(Vector2 worldCoords, PlantType pt, GameData &gd) {
 }
 
 void growSprout(PlantBody &pb, Sprite &s) {
-    std::cout << "x: " << pb.growthLoc.x << "y: " << pb.growthLoc.y << "\n";
     update(pb.growthLoc.y*pb.width + pb.growthLoc.x, pb, s, PlantPart::STEM, pb.stemColor);
     pb.growthLoc.y += 1;
 
@@ -56,7 +55,6 @@ void growSprout(PlantBody &pb, Sprite &s) {
         pb.arr[(pb.growthLoc.y-2)*pb.width + pb.growthLoc.x] != PlantPart::AIR &&
         randInt(0,6) == 0) {
 
-        std::cout << "shifting \n";
         int offset = randInt(0,1) == 0 ? 1 : -1;
         pb.growthLoc.x += offset;
     }
@@ -90,10 +88,8 @@ void updateGrowthPoints(PlantBody &pb) {
             pb.growthPhase = GrowthPhase::SPROUT;
             break;
         case 50:
-            std::cout << "flowering\n";
             pb.growthPoints += randInt(0,5);
             pb.growthPhase = GrowthPhase::FLOWERING;
-            printPlantBody(pb);
             break;
         default: // Seed phase
             break;

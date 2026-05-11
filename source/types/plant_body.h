@@ -35,7 +35,7 @@ struct PlantBody {
     Color petalColor;
     Color stemColor;
 
-    CoordPair growthLoc; // Where the plant is currently growing from in plantarr
+    uIntPair growthLoc; // Where the plant is currently growing from in plantarr
     GrowthPhase growthPhase = GrowthPhase::SEED;
     unsigned int growthPoints = 0;
 
