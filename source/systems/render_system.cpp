@@ -18,9 +18,9 @@ void printSprite(const Sprite& s) {
 }
 
 void drawSprite(const Sprite& s) {
-    unsigned int startX = s.worldCoords.x - ((unsigned int)s.width/2)*PIXEL_SIZE;
-
+    float startX = s.worldCoords.x - ((unsigned int)s.width/2)*PIXEL_SIZE;
     Vector2 drawPos;
+
     for (unsigned int y = 0; y < s.height; y++) {
         drawPos.y = s.worldCoords.y - y*PIXEL_SIZE;
         // todo: skip drawing this pixel if it's too high or low. end loop we're too low
@@ -43,7 +43,7 @@ void drawWorld(const std::vector<Sprite>& sprites) {
     ClearBackground(RAYWHITE);
 
     for (const auto& s : sprites) {
-        // Todo: detect if this sprite is fully offscreen
+        // Todo: skip if this sprite is fully offscreen
         drawSprite(s);
     }
 

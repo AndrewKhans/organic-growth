@@ -17,7 +17,7 @@ void update(unsigned int i, PlantBody &pb, Sprite &s, PlantPart pp, Color c) {
     s.pixels[i] = c;
 }
 
-void generatePlant(Vector2 worldCoords, PlantType pt, GameData &gd) {
+unsigned int generatePlant(Vector2 worldCoords, PlantType pt, GameData &gd) {
     PlantBody pb;
     Sprite s;
     unsigned int id = gd.nextEntityId++;
@@ -25,7 +25,6 @@ void generatePlant(Vector2 worldCoords, PlantType pt, GameData &gd) {
     pb.entityId = id;
     s.entityId = id;
 
-    pb.type = pt;
     pb.worldCoords = worldCoords;
     s.worldCoords  = worldCoords;
 
@@ -33,8 +32,8 @@ void generatePlant(Vector2 worldCoords, PlantType pt, GameData &gd) {
     s.pixels.resize(s.width*s.height, BLANK);
     update(pb.width*0 + (int)pb.width/2, pb, s, PlantPart::SEED, BROWN);
 
+    pb.type = pt;
     pb.growthLoc = {(unsigned int)pb.width/2, 0};
-
     pb.stemColor = {30, 120, 60, 255};
     pb.petalColor.r = randInt(0,255);
     pb.petalColor.g = randInt(0,255);
@@ -43,6 +42,10 @@ void generatePlant(Vector2 worldCoords, PlantType pt, GameData &gd) {
 
     gd.plantBodies.push_back(pb);
     gd.sprites.push_back(s);
+    gd.idToPlantBodyIdx[id] = gd.plantBodies.size()-1;
+    gd.idToSpriteIdx[id] = gd.sprites.size()-1;
+
+    return id;
 }
 
 void growSprout(PlantBody &pb, Sprite &s) {
@@ -87,7 +90,7 @@ void updateGrowthPoints(PlantBody &pb) {
             pb.growthPoints += randInt(0,5);
             pb.growthPhase = GrowthPhase::SPROUT;
             break;
-        case 50:
+        case 20:
             pb.growthPoints += randInt(0,5);
             pb.growthPhase = GrowthPhase::FLOWERING;
             break;
@@ -99,7 +102,9 @@ void updateGrowthPoints(PlantBody &pb) {
 
 void growPlants(GameData &gd) {
     for (auto& pb : gd.plantBodies) {
-        Sprite &s = gd.sprites[pb.entityId];
+        unsigned int spriteIdx = gd.idToSpriteIdx[pb.entityId];
+        Sprite &s = gd.sprites[spriteIdx];
+
         switch (pb.type) {
             case PlantType::FLOWER:
                 growFlower(pb, s);

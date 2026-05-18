@@ -3,8 +3,7 @@
 #include "raylib.h"
 #include <vector>
 
-constexpr unsigned int SPRITE_SIZE = 60;
-
+constexpr unsigned int SPRITE_SIZE = 32;
 
 struct Sprite {
     unsigned int entityId;

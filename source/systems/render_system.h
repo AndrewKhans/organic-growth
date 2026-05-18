@@ -4,7 +4,7 @@
 #include "types/sprite.h"
 #include <vector>
 
-constexpr unsigned int PIXEL_SIZE = 10; // How big are pixels that we draw?
+constexpr unsigned int PIXEL_SIZE = 30; // How big are pixels that we draw?
 
 // TODO: Do I need to make this static? I want the function to be hidden from people outside this file,
 // but if I just don't include it in the .h and only have it in the .cpp, that might do that

@@ -3,7 +3,7 @@
 #include "raylib.h"
 #include "constants.h"
 
-constexpr unsigned int PLANT_BODY_SIZE = 60;
+constexpr unsigned int PLANT_BODY_SIZE = 32;
 
 enum class PlantType : unsigned char {
     ALGAE,

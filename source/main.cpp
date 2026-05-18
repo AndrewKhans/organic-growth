@@ -6,10 +6,13 @@
 #include "systems/plant_system.h"
 #include "systems/fish_system.h"
 #include "systems/render_system.h"
+#include "systems/player_control_system.h"
+#include "asset_loader.h"
 #include "constants.h"
 #include "game_data.h"
 
-constexpr unsigned char NUM_PLANTS = 1;
+constexpr unsigned char NUM_PLANTS = 3;
+constexpr double TICK_INTERVAL = 0.1; // seconds between each tick
 
 void gameStateInit(GameData &gd) {
     int plantSpacing = WINDOW_WIDTH/(NUM_PLANTS+1);
@@ -18,37 +21,34 @@ void gameStateInit(GameData &gd) {
         generatePlant({xLocation, WINDOW_HEIGHT - 100}, PlantType::FLOWER, gd);
         xLocation += plantSpacing;
     }
+
+    unsigned int playerFishId = generateFish(gd, {WINDOW_WIDTH/2, WINDOW_HEIGHT - 100});
+    loadFishAssets(gd, playerFishId, "Fish1");
+    addPlayerControllerToEntity(gd, playerFishId);
 }
 
 void gameStateUpdates(GameData &gd) {
     growPlants(gd);
 }
 
-// void handleUserInput() {
-//     if (IsKeyDown(KEY_RIGHT)) playerFish.worldCoords.x += 2.0f;
-//     if (IsKeyDown(KEY_LEFT))  playerFish.worldCoords.x -= 2.0f;
-//     if (IsKeyDown(KEY_UP))    playerFish.worldCoords.y -= 2.0f;
-//     if (IsKeyDown(KEY_DOWN))  playerFish.worldCoords.y += 2.0f;
-// }
-
 int main(void)
 {
+    GameData gd;
+
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "organic-growth");
     SetTargetFPS(60);
 
-    GameData gd;
     gameStateInit(gd);
 
     double lastTick = 0.0;
-    const double tickInterval = 0.1; // seconds between each tick
 
     while (!WindowShouldClose()) {
         double now = GetTime();
-        if (now - lastTick >= tickInterval) {
+        if (now - lastTick >= TICK_INTERVAL) {
             gameStateUpdates(gd);
             lastTick = now;
         }
-        // handleUserInput();
+        handlePlayerInput(gd);
         drawWorld(gd.sprites);
     }
 

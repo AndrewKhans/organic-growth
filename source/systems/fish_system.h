@@ -6,4 +6,4 @@
 #include "types/sprite.h"
 
 
-void generateFish(Vector2 worldCoords, GameData gd);
+unsigned int generateFish(GameData &gd, Vector2 worldCoords);

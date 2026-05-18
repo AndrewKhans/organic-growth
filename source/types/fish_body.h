@@ -1,6 +1,6 @@
 #pragma once
 
-constexpr unsigned int FISH_BODY_SIZE = 60;
+constexpr unsigned int FISH_BODY_SIZE = 32;
 
 enum class FishPart : unsigned char {
     AIR,

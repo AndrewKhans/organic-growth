@@ -1,12 +1,24 @@
 #include "systems/fish_system.h"
+#include "asset_loader.h"
 #include <iostream>
 
-void update(unsigned int i, FishBody fb, Sprite *s, FishPart fp, Color c) {
-    fb.arr[i] = fp;
-    s->pixels[i] = c;
+// Debug functions
+void printFishBody(const FishBody& fb) {
+    for (unsigned int y = 0; y < fb.height; y++) {
+        for (unsigned int x = 0; x < fb.width; x++) {
+            FishPart fp = fb.arr[y*fb.height + x];
+            std::cout << (fp == FishPart::AIR ? 0 : 1);
+        }
+        std::cout << "\n";
+    }
 }
 
-void generateFish(Vector2 worldCoords, GameData gd){
+void update(unsigned int i, FishBody &fb, Sprite &s, FishPart fp, Color c) {
+    fb.arr[i] = fp;
+    s.pixels[i] = c;
+}
+
+unsigned int generateFish(GameData &gd, Vector2 worldCoords) {
     FishBody fb;
     Sprite s;
     unsigned int id = gd.nextEntityId++;
@@ -20,11 +32,10 @@ void generateFish(Vector2 worldCoords, GameData gd){
     fb.arr.resize(fb.width*fb.height, FishPart::AIR);
     s.pixels.resize(s.width*s.height, BLANK);
 
-    int i = (int)fb.width/2;
-    update(i-1, fb, &s, FishPart::BODY, BROWN);
-    update(i, fb, &s, FishPart::BODY, BROWN);
-    update(i+1, fb, &s, FishPart::BODY, BROWN);
-
-    gd.fishBodies.push_back(fb);
     gd.sprites.push_back(s);
+    gd.fishBodies.push_back(fb);
+    gd.idToFishBodyIdx[id] = gd.fishBodies.size()-1;
+    gd.idToSpriteIdx[id] = gd.sprites.size()-1;
+
+    return id;
 }
