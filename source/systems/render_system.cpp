@@ -3,8 +3,6 @@
 #include "constants.h"
 #include <iostream>
 
-#define IS_BLANK(x) ((x).r == 0 && (x).g == 0 && (x).b == 0 && (x).a == 0)
-
 // Debug Functions
 void printSprite(const Sprite& s) {
     for (unsigned int y = 0; y < s.height; y++) {
@@ -17,12 +15,14 @@ void printSprite(const Sprite& s) {
     }
 }
 
+// Note: The coords you pass to DrawRectangle are the top left corner
+// Draw a sprite, starting at the bottom left corner
 void drawSprite(const Sprite& s) {
-    float startX = s.worldCoords.x - ((unsigned int)s.width/2)*PIXEL_SIZE;
+    Vector2 offset = {((float)s.width/2)*PIXEL_SIZE, ((float)s.height/2)*PIXEL_SIZE - PIXEL_SIZE};
     Vector2 drawPos;
 
     for (unsigned int y = 0; y < s.height; y++) {
-        drawPos.y = s.worldCoords.y - y*PIXEL_SIZE;
+        drawPos.y = s.worldCoords.y - y*PIXEL_SIZE + offset.y;
         // todo: skip drawing this pixel if it's too high or low. end loop we're too low
         for (unsigned int x = 0; x < s.width; x++) {
             // todo: skip drawing this pixel if it's too far left or right. end inner loop
@@ -30,7 +30,7 @@ void drawSprite(const Sprite& s) {
             Color c = s.pixels[x + y*s.width];
             if IS_BLANK(c) continue;
 
-            drawPos.x = startX + x*PIXEL_SIZE;
+            drawPos.x = s.worldCoords.x + x*PIXEL_SIZE - offset.x;
             DrawRectangleV(drawPos, {PIXEL_SIZE, PIXEL_SIZE}, c);
         }
     }
@@ -45,7 +45,16 @@ void drawWorld(const std::vector<Sprite>& sprites) {
     for (const auto& s : sprites) {
         // Todo: skip if this sprite is fully offscreen
         drawSprite(s);
+        // rippleSprite(s);
     }
+    // unsigned int s = 90;
+    // DrawRectangle((WINDOW_WIDTH/2) - s/2,
+    //               (WINDOW_HEIGHT/2) - s/2,
+    //               s, s, RED);
+
+    // DrawRectangle((WINDOW_WIDTH/2) - 3/2,
+    //               (WINDOW_HEIGHT/2) - 3/2,
+    //               3, 3, BLUE);
 
     EndDrawing();
 }

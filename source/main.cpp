@@ -15,14 +15,14 @@ constexpr unsigned char NUM_PLANTS = 3;
 constexpr double TICK_INTERVAL = 0.1; // seconds between each tick
 
 void gameStateInit(GameData &gd) {
-    int plantSpacing = WINDOW_WIDTH/(NUM_PLANTS+1);
-    float xLocation = plantSpacing;
-    for (int i = 0; i < NUM_PLANTS; i++) {
-        generatePlant({xLocation, WINDOW_HEIGHT - 100}, PlantType::FLOWER, gd);
-        xLocation += plantSpacing;
-    }
+    // int plantSpacing = WINDOW_WIDTH/(NUM_PLANTS+1);
+    // float xLocation = plantSpacing;
+    // for (int i = 0; i < NUM_PLANTS; i++) {
+    //     generatePlant({xLocation, WINDOW_HEIGHT - 100}, PlantType::FLOWER, gd);
+    //     xLocation += plantSpacing;
+    // }
 
-    unsigned int playerFishId = generateFish(gd, {WINDOW_WIDTH/2, WINDOW_HEIGHT - 100});
+    unsigned int playerFishId = generateFish(gd, {WINDOW_WIDTH/2, WINDOW_HEIGHT/2});
     loadFishAssets(gd, playerFishId, "Fish1");
     addPlayerControllerToEntity(gd, playerFishId);
 }

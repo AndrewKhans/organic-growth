@@ -8,8 +8,7 @@ constexpr unsigned int WINDOW_HEIGHT = 700;
 constexpr unsigned int SCREEN_WIDTH = 900;
 constexpr unsigned int SCREEN_HEIGHT = 700;
 
-
-// Game constants
+#define IS_BLANK(c) ((c).r == 0 && (c).g == 0 && (c).b == 0 && (c).a == 0)
 
 struct uIntPair {
     unsigned int x = 0;
