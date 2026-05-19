@@ -16,4 +16,7 @@ struct FishBody {
     std::vector<FishPart> arr;
     unsigned int width  = FISH_BODY_SIZE;
     unsigned int height = FISH_BODY_SIZE;
+
+    // Cached values
+    float swimForce;
 };

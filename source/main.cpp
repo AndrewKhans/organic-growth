@@ -13,7 +13,7 @@
 #include "game_data.h"
 
 constexpr unsigned char NUM_PLANTS = 3;
-constexpr double TICK_INTERVAL = 0.1; // seconds between each tick
+constexpr double TICK_INTERVAL = 1/60; // seconds between each tick
 
 void gameStateInit(GameData &gd) {
     int plantSpacing = WINDOW_WIDTH/(NUM_PLANTS+1);
@@ -28,7 +28,9 @@ void gameStateInit(GameData &gd) {
 }
 
 void gameStateUpdates(GameData &gd) {
-    growPlants(gd);
+    if (randInt(0,10) == 0) {
+        growPlants(gd);
+    }
     simulatePhysics(gd);
 }
 

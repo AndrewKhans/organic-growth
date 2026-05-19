@@ -24,9 +24,10 @@ unsigned int addFlower(GameData &gd, Vector2 worldCoords) {
 
     PlantBody pb;
     pb.entityId = id;
-    pb.arr.resize(pb.width*pb.height, PlantPart::AIR);
     pb.type = PlantType::FLOWER;
+    pb.arr.resize(pb.width*pb.height, PlantPart::AIR);
     pb.growthLoc = {(unsigned int)pb.width/2, 0};
+    pb.ticksUntilGrowth = randInt(0,10);
     pb.stemColor = {30, 120, 60, 255};
     pb.petalColor.r = randInt(0,255);
     pb.petalColor.g = randInt(0,255);
@@ -84,19 +85,28 @@ void growFlower(PlantBody &pb, Sprite &s) {
 }
 
 void updateGrowthPoints(PlantBody &pb) {
+    if (pb.ticksUntilGrowth == 0) {
+        pb.ticksUntilGrowth -= 1;
+    }
+
+    pb.growthPoints++;
+}
+
+void updateGrowthPhase(PlantBody &pb) {
+
+    pb.ticksUntilGrowth = randInt(60,60*5);
+    std::cout << "next: " << pb.ticksUntilGrowth << "\n";
+
     switch (pb.growthPoints) {
         case 5:
-            pb.growthPoints += randInt(0,5);
             pb.growthPhase = GrowthPhase::SPROUT;
             break;
         case 20:
-            pb.growthPoints += randInt(0,5);
             pb.growthPhase = GrowthPhase::FLOWERING;
             break;
         default: // Seed phase
             break;
     }
-    pb.growthPoints++;
 }
 
 void growPlants(GameData &gd) {
@@ -104,12 +114,15 @@ void growPlants(GameData &gd) {
         unsigned int spriteIdx = gd.idToSpriteIdx[pb.entityId];
         Sprite &s = gd.sprites[spriteIdx];
 
-        switch (pb.type) {
-            case PlantType::FLOWER:
-                growFlower(pb, s);
-                break;
-            case PlantType::ALGAE:
-                break;
+        if (pb.ticksUntilGrowth == 0) {
+            switch (pb.type) {
+                case PlantType::FLOWER:
+                    growFlower(pb, s);
+                    break;
+                case PlantType::ALGAE:
+                    break;
+            }
+            pb.growthPoints++;
         }
         updateGrowthPoints(pb);
     }

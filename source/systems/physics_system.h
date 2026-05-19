@@ -4,6 +4,7 @@
 #include "game_data.h"
 #include "types/physics_body.h"
 #include <vector>
+#include <iostream>
 
-void applyAccel(GameData &gd, unsigned int entityId, Vector2 accel);
+void applyForce(GameData &gd, unsigned int entityId, Vector2 force);
 void simulatePhysics(GameData &gd);

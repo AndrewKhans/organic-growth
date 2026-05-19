@@ -9,12 +9,25 @@
 inline void handlePlayerInput(GameData &gd) {
     for (PlayerController &pc : gd.playerControllers) {
         unsigned int id = pc.entityId;
-        float mag = 5.0f;
+        unsigned int fishBodyIdx = gd.idToFishBodyIdx[id];
 
-        if (IsKeyDown(pc.rightKey)) applyAccel(gd, id, {mag, 0.0f});
-        if (IsKeyDown(pc.leftKey))  applyAccel(gd, id, {-mag, 0.0f});
-        if (IsKeyDown(pc.upKey))    applyAccel(gd, id, {0.0f, -mag});
-        if (IsKeyDown(pc.downKey))  applyAccel(gd, id, {0.0f, mag});
+        Vector2 force = {0.0f, 0.0f};
+        if (IsKeyDown(pc.rightKey)) force.x += 1;
+        if (IsKeyDown(pc.leftKey))  force.x -= 1;
+        if (IsKeyDown(pc.upKey))    force.y -= 1;
+        if (IsKeyDown(pc.downKey))  force.y += 1;
+
+        // Normalize, so that moving diagonal isn't faster than cardinal
+        if (force.x != 0 && force.y != 0) {
+            force.x *= 0.7071f;
+            force.y *= 0.7071f;
+        }
+        // Todo: Add operator override for Vector2 * Scalar
+        FishBody &fb = gd.fishBodies[fishBodyIdx];
+        force.x *= fb.swimForce;
+        force.y *= fb.swimForce;
+
+        applyForce(gd, id, force);
     }
 }
 

@@ -20,7 +20,7 @@ inline FishPart pixelToFishPart(const Color& c) {
     } else if (c.r == 32 && c.g == 255 && c.b == 0 && c.a == 255) {
         return FishPart::FIN;
     } else {
-        std::cout << "Unrecognized fish part:\n";
+        std::cout << "Unrecognized pixel value for fish part conversion:\n";
         exit(1);
         return FishPart::BODY;
     }

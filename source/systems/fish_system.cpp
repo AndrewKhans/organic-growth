@@ -21,19 +21,44 @@ void update(unsigned int i, FishBody &fb, Sprite &s, FishPart fp, Color c) {
 float calculateMass(const FishBody& fb) {
     float mass = 0.0f;
     for (const FishPart &fp : fb.arr) {
-        mass += fp == FishPart::AIR ? 0 : 1;
+        switch (fp) {
+            case FishPart::AIR:
+                break;
+            case FishPart::BODY:
+                mass += 1;
+                break;
+            case FishPart::MOUTH:
+                mass += 1;
+                break;
+            case FishPart::FIN:
+                mass += 0.5;
+                break;
+            default:
+                std::cout << "Unrecognized fish part:\n";
+                exit(1);
+        }
     }
     return mass;
 }
 
+float calculateSwimForce(const FishBody& fb) {
+    float swimForce;
+    for (const FishPart &fp : fb.arr) {
+        swimForce += fp == FishPart::FIN ? 3 : 0;
+    }
+    return swimForce;
+}
+
+
 unsigned int addFish(GameData &gd, Vector2 worldCoords) {
     unsigned int id = gd.nextEntityId++;
 
-    FishBody fb = loadFishBody(id, "Fish1_Sprite.png");
+    FishBody fb = loadFishBody(id, "Fish1_Body.png");
+    fb.swimForce = calculateSwimForce(fb);
     gd.fishBodies.push_back(fb);
     gd.idToFishBodyIdx[id] = gd.fishBodies.size()-1;
 
-    Sprite s = loadSprite(id, "Fish1_Body.png");
+    Sprite s = loadSprite(id, "Fish1_Sprite.png");
     gd.sprites.push_back(s);
     gd.idToSpriteIdx[id] = gd.sprites.size()-1;
 
