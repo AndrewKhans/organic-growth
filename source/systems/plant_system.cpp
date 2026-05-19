@@ -27,7 +27,6 @@ unsigned int addFlower(GameData &gd, Vector2 worldCoords) {
     pb.type = PlantType::FLOWER;
     pb.arr.resize(pb.width*pb.height, PlantPart::AIR);
     pb.growthLoc = {(unsigned int)pb.width/2, 0};
-    pb.ticksUntilGrowth = randInt(0,10);
     pb.stemColor = {30, 120, 60, 255};
     pb.petalColor.r = randInt(0,255);
     pb.petalColor.g = randInt(0,255);
@@ -70,8 +69,10 @@ void growFlowering(PlantBody &pb, Sprite &s) {
 void growFlower(PlantBody &pb, Sprite &s) {
     switch (pb.growthPhase) {
         case GrowthPhase::SEED:
+            if (pb.growthPoints > 5) pb.growthPhase = GrowthPhase::SPROUT;
             break;
         case GrowthPhase::SPROUT:
+            if (pb.growthPoints > 20) pb.growthPhase = GrowthPhase::FLOWERING;
             growSprout(pb, s);
             break;
         case GrowthPhase::FLOWERING:
@@ -84,47 +85,29 @@ void growFlower(PlantBody &pb, Sprite &s) {
     }
 }
 
-void updateGrowthPoints(PlantBody &pb) {
-    if (pb.ticksUntilGrowth == 0) {
-        pb.ticksUntilGrowth -= 1;
-    }
-
+void growPlant(PlantBody &pb, Sprite& s) {
     pb.growthPoints++;
-}
 
-void updateGrowthPhase(PlantBody &pb) {
-
-    pb.ticksUntilGrowth = randInt(60,60*5);
-    std::cout << "next: " << pb.ticksUntilGrowth << "\n";
-
-    switch (pb.growthPoints) {
-        case 5:
-            pb.growthPhase = GrowthPhase::SPROUT;
+    switch (pb.type) {
+        case PlantType::FLOWER:
+            growFlower(pb, s);
             break;
-        case 20:
-            pb.growthPhase = GrowthPhase::FLOWERING;
-            break;
-        default: // Seed phase
+        case PlantType::ALGAE:
             break;
     }
 }
 
 void growPlants(GameData &gd) {
     for (auto& pb : gd.plantBodies) {
+        if (pb.ticksUntilGrowth > 0) {
+            pb.ticksUntilGrowth--;
+            continue;
+        }
+        pb.ticksUntilGrowth = randInt(10, 60);
+
         unsigned int spriteIdx = gd.idToSpriteIdx[pb.entityId];
         Sprite &s = gd.sprites[spriteIdx];
-
-        if (pb.ticksUntilGrowth == 0) {
-            switch (pb.type) {
-                case PlantType::FLOWER:
-                    growFlower(pb, s);
-                    break;
-                case PlantType::ALGAE:
-                    break;
-            }
-            pb.growthPoints++;
-        }
-        updateGrowthPoints(pb);
+        growPlant(pb, s);
     }
 }
 

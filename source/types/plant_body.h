@@ -37,7 +37,7 @@ struct PlantBody {
     uIntPair growthLoc; // Where the plant is currently growing from in plantarr
     GrowthPhase growthPhase = GrowthPhase::SEED;
     unsigned int growthPoints = 0;
-    unsigned int ticksUntilGrowth; // How many ticks from now will we get a growhtPoint?
+    unsigned int ticksUntilGrowth = 0; // How many ticks from now will we get a growhtPoint?
 
     // Flattened 2D vector, 0,0 is the bottom left
     std::vector<PlantPart> arr;

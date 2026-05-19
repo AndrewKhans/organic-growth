@@ -28,9 +28,7 @@ void gameStateInit(GameData &gd) {
 }
 
 void gameStateUpdates(GameData &gd) {
-    if (randInt(0,10) == 0) {
-        growPlants(gd);
-    }
+    growPlants(gd);
     simulatePhysics(gd);
 }
 

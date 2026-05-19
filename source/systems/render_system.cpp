@@ -52,7 +52,7 @@ void drawSprite(const Sprite &s, const Vector2 &worldCoords) {
 
 void drawWorld(GameData &gd) {
     BeginDrawing();
-    ClearBackground(RAYWHITE);
+    ClearBackground(BEIGE);
 
     for (const Sprite& s : gd.sprites) {
         const Vector2 &worldCoords = gd.idToWorldCoords[s.entityId];
