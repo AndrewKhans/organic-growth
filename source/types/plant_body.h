@@ -29,7 +29,6 @@ enum class GrowthPhase : unsigned char {
 
 struct PlantBody {
     unsigned int entityId;
-    Vector2 worldCoords; // The center of the bottom of the plant, in world-coords
 
     PlantType type;
     Color petalColor;

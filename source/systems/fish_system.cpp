@@ -18,24 +18,32 @@ void update(unsigned int i, FishBody &fb, Sprite &s, FishPart fp, Color c) {
     s.pixels[i] = c;
 }
 
-unsigned int generateFish(GameData &gd, Vector2 worldCoords) {
-    FishBody fb;
-    Sprite s;
+float calculateMass(const FishBody& fb) {
+    float mass = 0.0f;
+    for (const FishPart &fp : fb.arr) {
+        mass += fp == FishPart::AIR ? 0 : 1;
+    }
+    return mass;
+}
+
+unsigned int addFish(GameData &gd, Vector2 worldCoords) {
     unsigned int id = gd.nextEntityId++;
 
-    fb.entityId = id;
-    s.entityId = id;
-
-    fb.worldCoords = worldCoords;
-    s.worldCoords = worldCoords;
-
-    fb.arr.resize(fb.width*fb.height, FishPart::AIR);
-    s.pixels.resize(s.width*s.height, BLANK);
-
-    gd.sprites.push_back(s);
+    FishBody fb = loadFishBody(id, "Fish1_Sprite.png");
     gd.fishBodies.push_back(fb);
     gd.idToFishBodyIdx[id] = gd.fishBodies.size()-1;
+
+    Sprite s = loadSprite(id, "Fish1_Body.png");
+    gd.sprites.push_back(s);
     gd.idToSpriteIdx[id] = gd.sprites.size()-1;
 
+    PhysicsBody pb;
+    pb.entityId = id;
+    pb.mass = calculateMass(fb);
+    pb.velocity = {0.0f, 0.0f};
+    gd.physicsBodies.push_back(pb);
+    gd.idToPhysicsBodyIdx[id] = gd.physicsBodies.size()-1;
+
+    gd.idToWorldCoords[id] = worldCoords;
     return id;
 }

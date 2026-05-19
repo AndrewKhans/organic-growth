@@ -12,9 +12,6 @@ enum class FishPart : unsigned char {
 struct FishBody {
     unsigned int entityId;
 
-    Vector2 worldCoords; // The center of the fish
-    float rotation = 0;
-
     // Flattened 2D vector, 0,0 is the bottom left
     std::vector<FishPart> arr;
     unsigned int width  = FISH_BODY_SIZE;

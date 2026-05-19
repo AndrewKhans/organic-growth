@@ -6,18 +6,23 @@
 #include "types/fish_body.h"
 #include "types/sprite.h"
 #include "types/player_controller.h"
+#include "types/physics_body.h"
 
 struct GameData {
     unsigned int nextEntityId = 0;
+
+    std::unordered_map<unsigned int, Vector2> idToWorldCoords;
 
     std::vector<Sprite> sprites;
     std::vector<FishBody> fishBodies;
     std::vector<PlantBody> plantBodies;
     std::vector<PlayerController> playerControllers;
+    std::vector<PhysicsBody> physicsBodies;
 
     // consider replacing hashmaps with sparse arrays for performance
     std::unordered_map<unsigned int, unsigned int> idToSpriteIdx;
     std::unordered_map<unsigned int, unsigned int> idToFishBodyIdx;
     std::unordered_map<unsigned int, unsigned int> idToPlantBodyIdx;
     std::unordered_map<unsigned int, unsigned int> idToPlayerControllerIdx;
+    std::unordered_map<unsigned int, unsigned int> idToPhysicsBodyIdx;
 };

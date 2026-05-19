@@ -1,10 +1,8 @@
-#include "raylib.h"
 #include "render_system.h"
-#include "constants.h"
 #include <iostream>
 
 // Debug Functions
-void printSprite(const Sprite& s) {
+void printSprite(const Sprite &s) {
     for (unsigned int y = 0; y < s.height; y++) {
         for (unsigned int x = 0; x < s.width; x++) {
             Color c = s.pixels[x + y*s.width];
@@ -17,12 +15,28 @@ void printSprite(const Sprite& s) {
 
 // Note: The coords you pass to DrawRectangle are the top left corner
 // Draw a sprite, starting at the bottom left corner
-void drawSprite(const Sprite& s) {
-    Vector2 offset = {((float)s.width/2)*PIXEL_SIZE, ((float)s.height/2)*PIXEL_SIZE - PIXEL_SIZE};
-    Vector2 drawPos;
 
+/*
+Rotation
+
+To go from the center to a pixel's location,
+Dist from center to original point = sqrt(x*pixelsize^2 + y*pixelsize^2)
+Dist from center to shifted point (dist') = sqrt(x'*pixelsize^2 + y'*pixelsize^2)
+x component of displacement = sin(rotation)*dist'
+y component of displacement = dist - dist'
+.
+|__.
+| /
+|/
+*/
+void drawSprite(const Sprite &s, const Vector2 &worldCoords) {
+    Vector2 offset = {((float)s.width/2)*PIXEL_SIZE, ((float)s.height/2)*PIXEL_SIZE - PIXEL_SIZE};
+    Rectangle pixel;
+    pixel.height = PIXEL_SIZE;
+    pixel.width = PIXEL_SIZE;
+    // std::cout << "worldcoords: " << worldCoords.x << ", " << worldCoords.y << "\n";
     for (unsigned int y = 0; y < s.height; y++) {
-        drawPos.y = s.worldCoords.y - y*PIXEL_SIZE + offset.y;
+        pixel.y = worldCoords.y - y*PIXEL_SIZE + offset.y;
         // todo: skip drawing this pixel if it's too high or low. end loop we're too low
         for (unsigned int x = 0; x < s.width; x++) {
             // todo: skip drawing this pixel if it's too far left or right. end inner loop
@@ -30,21 +44,21 @@ void drawSprite(const Sprite& s) {
             Color c = s.pixels[x + y*s.width];
             if IS_BLANK(c) continue;
 
-            drawPos.x = s.worldCoords.x + x*PIXEL_SIZE - offset.x;
-            DrawRectangleV(drawPos, {PIXEL_SIZE, PIXEL_SIZE}, c);
+            pixel.x = worldCoords.x + x*PIXEL_SIZE - offset.x;
+            DrawRectanglePro(pixel, {0, 0}, 0, c);
         }
     }
 }
 
-void drawWorld(const std::vector<Sprite>& sprites) {
-
+void drawWorld(GameData &gd) {
     BeginDrawing();
-
     ClearBackground(RAYWHITE);
 
-    for (const auto& s : sprites) {
+    for (const Sprite& s : gd.sprites) {
+        const Vector2 &worldCoords = gd.idToWorldCoords[s.entityId];
+
         // Todo: skip if this sprite is fully offscreen
-        drawSprite(s);
+        drawSprite(s, worldCoords);
         // rippleSprite(s);
     }
     // unsigned int s = 90;

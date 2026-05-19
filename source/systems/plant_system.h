@@ -5,6 +5,6 @@
 #include "types/plant_body.h"
 #include "raylib.h"
 
+unsigned int addFlower(GameData &gd, Vector2 worldCoords);
 
-unsigned int generatePlant(Vector2 worldCoords, PlantType pt, GameData &gd);
 void growPlants(GameData &gd);

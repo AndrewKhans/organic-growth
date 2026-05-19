@@ -7,6 +7,7 @@
 #include "systems/fish_system.h"
 #include "systems/render_system.h"
 #include "systems/player_control_system.h"
+#include "systems/physics_system.h"
 #include "asset_loader.h"
 #include "constants.h"
 #include "game_data.h"
@@ -15,20 +16,20 @@ constexpr unsigned char NUM_PLANTS = 3;
 constexpr double TICK_INTERVAL = 0.1; // seconds between each tick
 
 void gameStateInit(GameData &gd) {
-    // int plantSpacing = WINDOW_WIDTH/(NUM_PLANTS+1);
-    // float xLocation = plantSpacing;
-    // for (int i = 0; i < NUM_PLANTS; i++) {
-    //     generatePlant({xLocation, WINDOW_HEIGHT - 100}, PlantType::FLOWER, gd);
-    //     xLocation += plantSpacing;
-    // }
+    int plantSpacing = WINDOW_WIDTH/(NUM_PLANTS+1);
+    float xLocation = plantSpacing;
+    for (int i = 0; i < NUM_PLANTS; i++) {
+        addFlower(gd, {xLocation, WINDOW_HEIGHT/3});
+        xLocation += plantSpacing;
+    }
 
-    unsigned int playerFishId = generateFish(gd, {WINDOW_WIDTH/2, WINDOW_HEIGHT/2});
-    loadFishAssets(gd, playerFishId, "Fish1");
-    addPlayerControllerToEntity(gd, playerFishId);
+    unsigned int playerFishId = addFish(gd, {WINDOW_WIDTH/2, WINDOW_HEIGHT/2});
+    addPlayerController(gd, playerFishId);
 }
 
 void gameStateUpdates(GameData &gd) {
     growPlants(gd);
+    simulatePhysics(gd);
 }
 
 int main(void)
@@ -49,7 +50,7 @@ int main(void)
             lastTick = now;
         }
         handlePlayerInput(gd);
-        drawWorld(gd.sprites);
+        drawWorld(gd);
     }
 
     CloseWindow();

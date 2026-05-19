@@ -17,22 +17,15 @@ void update(unsigned int i, PlantBody &pb, Sprite &s, PlantPart pp, Color c) {
     s.pixels[i] = c;
 }
 
-unsigned int generatePlant(Vector2 worldCoords, PlantType pt, GameData &gd) {
-    PlantBody pb;
-    Sprite s;
+unsigned int addFlower(GameData &gd, Vector2 worldCoords) {
     unsigned int id = gd.nextEntityId++;
 
+    gd.idToWorldCoords[id] = worldCoords;
+
+    PlantBody pb;
     pb.entityId = id;
-    s.entityId = id;
-
-    pb.worldCoords = worldCoords;
-    s.worldCoords  = worldCoords;
-
     pb.arr.resize(pb.width*pb.height, PlantPart::AIR);
-    s.pixels.resize(s.width*s.height, BLANK);
-    update(pb.width*0 + (int)pb.width/2, pb, s, PlantPart::SEED, BROWN);
-
-    pb.type = pt;
+    pb.type = PlantType::FLOWER;
     pb.growthLoc = {(unsigned int)pb.width/2, 0};
     pb.stemColor = {30, 120, 60, 255};
     pb.petalColor.r = randInt(0,255);
@@ -40,10 +33,16 @@ unsigned int generatePlant(Vector2 worldCoords, PlantType pt, GameData &gd) {
     pb.petalColor.b = randInt(0,255);
     pb.petalColor.a = 255;
 
-    gd.plantBodies.push_back(pb);
+    Sprite s;
+    s.entityId = id;
+    s.pixels.resize(s.width*s.height, BLANK);
+
+    // Add seed before pushing to vectors
+    update(pb.width*0 + (int)pb.width/2, pb, s, PlantPart::SEED, BROWN);
     gd.sprites.push_back(s);
-    gd.idToPlantBodyIdx[id] = gd.plantBodies.size()-1;
+    gd.plantBodies.push_back(pb);
     gd.idToSpriteIdx[id] = gd.sprites.size()-1;
+    gd.idToPlantBodyIdx[id] = gd.plantBodies.size()-1;
 
     return id;
 }
