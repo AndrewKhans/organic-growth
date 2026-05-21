@@ -31,13 +31,14 @@ struct PlantBody {
     unsigned int entityId;
 
     PlantType type;
-    Color petalColor;
-    Color stemColor;
+    Color primaryColor;
+    Color secondaryColor;
 
-    uIntPair growthLoc; // Where the plant is currently growing from in plantarr
-    GrowthPhase growthPhase = GrowthPhase::SEED;
     unsigned int growthPoints = 0;
     unsigned int ticksUntilGrowth = 0; // How many ticks from now will we get a growhtPoint?
+
+    uIntPair growthLoc; // Where the plant is currently growing from in arr
+    GrowthPhase growthPhase = GrowthPhase::SEED;
 
     // Flattened 2D vector, 0,0 is the bottom left
     std::vector<PlantPart> arr;

@@ -10,6 +10,7 @@ inline void handlePlayerInput(GameData &gd) {
     for (PlayerController &pc : gd.playerControllers) {
         unsigned int id = pc.entityId;
         unsigned int fishBodyIdx = gd.idToFishBodyIdx[id];
+        FishBody &fb = gd.fishBodies[fishBodyIdx];
 
         Vector2 force = {0.0f, 0.0f};
         if (IsKeyDown(pc.rightKey)) force.x += 1;
@@ -17,13 +18,13 @@ inline void handlePlayerInput(GameData &gd) {
         if (IsKeyDown(pc.upKey))    force.y -= 1;
         if (IsKeyDown(pc.downKey))  force.y += 1;
 
-        // Normalize, so that moving diagonal isn't faster than cardinal
+        // Normalize so that moving diagonal is the same speed as cardinal
         if (force.x != 0 && force.y != 0) {
             force.x *= 0.7071f;
             force.y *= 0.7071f;
         }
+
         // Todo: Add operator override for Vector2 * Scalar
-        FishBody &fb = gd.fishBodies[fishBodyIdx];
         force.x *= fb.swimForce;
         force.y *= fb.swimForce;
 

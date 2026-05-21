@@ -19,7 +19,7 @@ struct GameData {
     std::vector<PlayerController> playerControllers;
     std::vector<PhysicsBody> physicsBodies;
 
-    // consider replacing hashmaps with sparse arrays for performance
+    // Consider replacing hashmaps with sparse arrays for performance
     std::unordered_map<unsigned int, unsigned int> idToSpriteIdx;
     std::unordered_map<unsigned int, unsigned int> idToFishBodyIdx;
     std::unordered_map<unsigned int, unsigned int> idToPlantBodyIdx;

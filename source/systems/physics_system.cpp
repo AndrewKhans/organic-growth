@@ -27,7 +27,6 @@ void applyDrag(PhysicsBody &pb) {
 
 void simulatePhysics(GameData &gd) {
     for (PhysicsBody &pb : gd.physicsBodies) {
-        // std::cout << "Physics info: {" << pb.velocity.x << ", " << pb.velocity.y << "}, " << pb.mass << "g\n";
         Vector2 &worldCoords = gd.idToWorldCoords[pb.entityId];
 
         velocityDisplace(pb, worldCoords);

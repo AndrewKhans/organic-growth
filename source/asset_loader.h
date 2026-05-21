@@ -10,7 +10,6 @@
 
 inline FishPart pixelToFishPart(const Color& c) {
     // TODO: Use a switch
-    // TODO: Look up how to properly throw an error
     if (IS_BLANK(c)) {
         return FishPart::AIR;
     } else if (c.r == 255 && c.g == 0 && c.b == 0 && c.a == 255) {
@@ -20,9 +19,8 @@ inline FishPart pixelToFishPart(const Color& c) {
     } else if (c.r == 32 && c.g == 255 && c.b == 0 && c.a == 255) {
         return FishPart::FIN;
     } else {
-        std::cout << "Unrecognized pixel value for fish part conversion:\n";
-        exit(1);
-        return FishPart::BODY;
+        throw std::runtime_error("Unrecognized pixel value for fish part conversion");
+
     }
 }
 inline Sprite loadSprite(unsigned int entityId, const std::string& pngPath) {

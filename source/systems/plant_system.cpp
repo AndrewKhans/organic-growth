@@ -27,11 +27,11 @@ unsigned int addFlower(GameData &gd, Vector2 worldCoords) {
     pb.type = PlantType::FLOWER;
     pb.arr.resize(pb.width*pb.height, PlantPart::AIR);
     pb.growthLoc = {(unsigned int)pb.width/2, 0};
-    pb.stemColor = {30, 120, 60, 255};
-    pb.petalColor.r = randInt(0,255);
-    pb.petalColor.g = randInt(0,255);
-    pb.petalColor.b = randInt(0,255);
-    pb.petalColor.a = 255;
+    pb.primaryColor = {30, 120, 60, 255};
+    pb.secondaryColor.r = randInt(0,255);
+    pb.secondaryColor.g = randInt(0,255);
+    pb.secondaryColor.b = randInt(0,255);
+    pb.secondaryColor.a = 255;
 
     Sprite s;
     s.entityId = id;
@@ -47,8 +47,39 @@ unsigned int addFlower(GameData &gd, Vector2 worldCoords) {
     return id;
 }
 
+unsigned int addAlgae(GameData &gd, Vector2 worldCoords) {
+    unsigned int id = gd.nextEntityId++;
+
+    gd.idToWorldCoords[id] = worldCoords;
+
+    PlantBody pb;
+    pb.entityId = id;
+    pb.type = PlantType::ALGAE;
+    pb.arr.resize(pb.width*pb.height, PlantPart::AIR);
+    pb.growthLoc = {(unsigned int)pb.width/2, (unsigned int)pb.height/2};
+    pb.primaryColor = {30, 200, 60, 100};
+    pb.secondaryColor.r = randInt(0,255);
+    pb.secondaryColor.g = randInt(0,255);
+    pb.secondaryColor.b = randInt(0,255);
+    pb.secondaryColor.a = 255;
+
+    Sprite s;
+    s.entityId = id;
+    s.pixels.resize(s.width*s.height, BLANK);
+
+    // Add seed before pushing to vectors
+    update(pb.width*0 + (int)pb.width/2, pb, s, PlantPart::SEED, BROWN);
+    gd.sprites.push_back(s);
+    gd.plantBodies.push_back(pb);
+    gd.idToSpriteIdx[id] = gd.sprites.size()-1;
+    gd.idToPlantBodyIdx[id] = gd.plantBodies.size()-1;
+
+    return id;
+}
+
+// Growth functions
 void growSprout(PlantBody &pb, Sprite &s) {
-    update(pb.growthLoc.y*pb.width + pb.growthLoc.x, pb, s, PlantPart::STEM, pb.stemColor);
+    update(pb.growthLoc.y*pb.width + pb.growthLoc.x, pb, s, PlantPart::STEM, pb.primaryColor);
     pb.growthLoc.y += 1;
 
     // Stem shift
@@ -63,7 +94,7 @@ void growSprout(PlantBody &pb, Sprite &s) {
 }
 
 void growFlowering(PlantBody &pb, Sprite &s) {
-    update(pb.growthLoc.y*pb.width + pb.growthLoc.x, pb, s, PlantPart::PETAL, pb.petalColor);
+    update(pb.growthLoc.y*pb.width + pb.growthLoc.x, pb, s, PlantPart::PETAL, pb.secondaryColor);
 }
 
 void growFlower(PlantBody &pb, Sprite &s) {
