@@ -49,8 +49,7 @@ float calculateSwimForce(const FishBody& fb) {
     return swimForce;
 }
 
-
-unsigned int addFish(GameData &gd, Vector2 worldCoords) {
+unsigned int addFish(GameData &gd, Transform2 t) {
     unsigned int id = gd.nextEntityId++;
 
     FishBody fb = loadFishBody(id, "Fish1_Body.png");
@@ -69,6 +68,7 @@ unsigned int addFish(GameData &gd, Vector2 worldCoords) {
     gd.physicsBodies.push_back(pb);
     gd.idToPhysicsBodyIdx[id] = gd.physicsBodies.size()-1;
 
-    gd.idToWorldCoords[id] = worldCoords;
+    gd.idToTransform2[id] = t;
     return id;
 }
+

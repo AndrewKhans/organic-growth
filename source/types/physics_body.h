@@ -6,8 +6,5 @@ struct PhysicsBody {
     unsigned int entityId;
 
     float mass;
-    Vector2 velocity;
-
-    // float velocity;
-    // float direction; // Based on unit circle, Directly right is 0, down is 90
+    Vector2 velocity; // 0, -1 is North and 1, 0 is East
 };

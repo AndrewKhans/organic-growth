@@ -17,35 +17,32 @@ void printSprite(const Sprite &s) {
 // Draw a sprite, starting at the bottom left corner
 
 /*
-Rotation
-
-To go from the center to a pixel's location,
-Dist from center to original point = sqrt(x*pixelsize^2 + y*pixelsize^2)
-Dist from center to shifted point (dist') = sqrt(x'*pixelsize^2 + y'*pixelsize^2)
-x component of displacement = sin(rotation)*dist'
-y component of displacement = dist - dist'
-.
-|__.
-| /
-|/
+    Todo: Optimizations
+        - Before the loop, use the X/Y and size to determine if we should even start the loop
+        - Skip drawing a pixel if it's Y is too high or too low. End the loop if the current pixel is too low, as other
+          pixels will definitely be too low. Apply the same logic to X
+        - Try finding a line that pixels fall on and use that for placing them, instead of doing a rotation matrix
+          for each
+        - Try rotating all pixels at the same time using matrix multiplication with a rotation matrix
 */
-void drawSprite(const Sprite &s, const Vector2 &worldCoords) {
-    Vector2 offset = {((float)s.width/2)*PIXEL_SIZE, ((float)s.height/2)*PIXEL_SIZE - PIXEL_SIZE};
+void drawSprite(const Sprite &s, const Transform2 &t) {
     Rectangle pixel;
-    pixel.height = PIXEL_SIZE;
     pixel.width = PIXEL_SIZE;
-    // std::cout << "worldcoords: " << worldCoords.x << ", " << worldCoords.y << "\n";
+    pixel.height = PIXEL_SIZE;
+
+    Vector2 offset = {((float)s.width/2)*PIXEL_SIZE - PIXEL_SIZE/2, ((float)s.height/2)*PIXEL_SIZE - PIXEL_SIZE/2};
+    float rot = t.rot - 180;
+    float rads = rot * (PI / 180);
     for (unsigned int y = 0; y < s.height; y++) {
-        pixel.y = worldCoords.y - y*PIXEL_SIZE + offset.y;
-        // todo: skip drawing this pixel if it's too high or low. end loop we're too low
+        float yCoord = y*PIXEL_SIZE - offset.y;
         for (unsigned int x = 0; x < s.width; x++) {
-            // todo: skip drawing this pixel if it's too far left or right. end inner loop
-            // if too far right
             Color c = s.pixels[x + y*s.width];
             if IS_BLANK(c) continue;
 
-            pixel.x = worldCoords.x + x*PIXEL_SIZE - offset.x;
-            DrawRectanglePro(pixel, {0, 0}, 0, c);
+            float xCoord = x*PIXEL_SIZE - offset.x;
+            pixel.x = t.x + (xCoord*cosf(rads) - yCoord*sinf(rads));
+            pixel.y = t.y + (xCoord*sinf(rads) + yCoord*cosf(rads));
+            DrawRectanglePro(pixel, {PIXEL_SIZE/2, PIXEL_SIZE/2}, rot, c);
         }
     }
 }
@@ -55,10 +52,10 @@ void drawWorld(GameData &gd) {
     ClearBackground(BEIGE);
 
     for (const Sprite& s : gd.sprites) {
-        const Vector2 &worldCoords = gd.idToWorldCoords[s.entityId];
+        const Transform2 &t = gd.idToTransform2[s.entityId];
 
         // Todo: skip if this sprite is fully offscreen
-        drawSprite(s, worldCoords);
+        drawSprite(s, t);
         // rippleSprite(s);
     }
     // unsigned int s = 90;

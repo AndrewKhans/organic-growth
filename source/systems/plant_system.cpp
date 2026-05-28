@@ -17,10 +17,10 @@ void update(unsigned int i, PlantBody &pb, Sprite &s, PlantPart pp, Color c) {
     s.pixels[i] = c;
 }
 
-unsigned int addFlower(GameData &gd, Vector2 worldCoords) {
+unsigned int addFlower(GameData &gd, Transform2 t) {
     unsigned int id = gd.nextEntityId++;
 
-    gd.idToWorldCoords[id] = worldCoords;
+    gd.idToTransform2[id] = t;
 
     PlantBody pb;
     pb.entityId = id;
@@ -47,10 +47,10 @@ unsigned int addFlower(GameData &gd, Vector2 worldCoords) {
     return id;
 }
 
-unsigned int addAlgae(GameData &gd, Vector2 worldCoords) {
+unsigned int addAlgae(GameData &gd, Transform2 t) {
     unsigned int id = gd.nextEntityId++;
 
-    gd.idToWorldCoords[id] = worldCoords;
+    gd.idToTransform2[id] = t;
 
     PlantBody pb;
     pb.entityId = id;
@@ -157,8 +157,8 @@ void growPlants(GameData &gd) {
 
 //         // The polar coordinate of each petal in sequence `i` is `(seedHeadRadius, i*angleBetweenPetals)`
 //         // The cartesian coordinates of each petal are
-//         petalCoords[i].x = f.seedHeadRadius * math.cos(angleBetweenPetals);
-//         petalCoords[i].y = f.seedHeadRadius * math.sin(angleBetweenPetals);
+//         petalCoords[i].x = f.seedHeadRadius * math.cosf(angleBetweenPetals);
+//         petalCoords[i].y = f.seedHeadRadius * math.sinf(angleBetweenPetals);
 
 //     }
 // }

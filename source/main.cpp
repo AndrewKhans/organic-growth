@@ -19,11 +19,11 @@ void gameStateInit(GameData &gd) {
     int plantSpacing = WINDOW_WIDTH/(NUM_PLANTS+1);
     float xLocation = plantSpacing;
     for (int i = 0; i < NUM_PLANTS; i++) {
-        addFlower(gd, {xLocation, WINDOW_HEIGHT/3});
+        addFlower(gd, {xLocation, WINDOW_HEIGHT/3, 0});
         xLocation += plantSpacing;
     }
 
-    unsigned int playerFishId = addFish(gd, {WINDOW_WIDTH/2, WINDOW_HEIGHT/2});
+    unsigned int playerFishId = addFish(gd, {WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 45});
     addPlayerController(gd, playerFishId);
 }
 
@@ -47,10 +47,10 @@ int main(void)
         double now = GetTime();
         if (now - lastTick >= TICK_INTERVAL) {
             gameStateUpdates(gd);
+            handlePlayerInput(gd);
+            drawWorld(gd);
             lastTick = now;
         }
-        handlePlayerInput(gd);
-        drawWorld(gd);
     }
 
     CloseWindow();
