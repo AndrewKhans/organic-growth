@@ -8,6 +8,7 @@
 #include "systems/render_system.h"
 #include "systems/player_control_system.h"
 #include "systems/physics_system.h"
+#include "systems/ai_system.h"
 #include "asset_loader.h"
 #include "constants.h"
 #include "game_data.h"
@@ -23,33 +24,41 @@ void gameStateInit(GameData &gd) {
         xLocation += plantSpacing;
     }
 
-    unsigned int playerFishId = addFish(gd, {WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 45});
+    unsigned int playerFishId = addFish(gd, {WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 0});
     addPlayerController(gd, playerFishId);
+
+    for (int i = 0; i < 3; i++) {
+        unsigned int fishId = addFish(gd, {WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 0});
+        addAiBrain(gd, fishId);
+    }
 }
 
-void gameStateUpdates(GameData &gd) {
+void gameStateUpdates(GameData &gd, unsigned int tickCount) {
     growPlants(gd);
+    aiDecisions(gd, tickCount);
     simulatePhysics(gd);
 }
 
 int main(void)
 {
-    GameData gd;
-
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "organic-growth");
     SetTargetFPS(60);
 
+    GameData gd;
     gameStateInit(gd);
 
-    double lastTick = 0.0;
+    double lastTickTime = 0.0;
+    unsigned int tickCount = 0;
 
     while (!WindowShouldClose()) {
         double now = GetTime();
-        if (now - lastTick >= TICK_INTERVAL) {
-            gameStateUpdates(gd);
+        if (now - lastTickTime >= TICK_INTERVAL) {
+            gameStateUpdates(gd, tickCount);
             handlePlayerInput(gd);
             drawWorld(gd);
-            lastTick = now;
+
+            tickCount++;
+            lastTickTime = now;
         }
     }
 

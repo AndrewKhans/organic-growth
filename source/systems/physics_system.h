@@ -6,5 +6,5 @@
 #include <vector>
 #include <iostream>
 
-void applyForce(GameData &gd, unsigned int entityId, Vector2 force);
+void applyForce(PhysicsBody& pb, Vector2 force);
 void simulatePhysics(GameData &gd);

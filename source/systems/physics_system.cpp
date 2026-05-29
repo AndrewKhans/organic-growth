@@ -4,14 +4,7 @@
 constexpr float DRAG = 0.8f;
 constexpr float ROTATION_SPEED = 1.0f; // Deg/s
 
-// v = d/t
-// a = delta_v/t
-// v = old_v + a*t
-// How does mass fit in?
-void applyForce(GameData &gd, unsigned int entityId, Vector2 force) {
-    unsigned int pbIdx = gd.idToPhysicsBodyIdx[entityId];
-    PhysicsBody &pb = gd.physicsBodies[pbIdx];
-
+void applyForce(PhysicsBody& pb, Vector2 force) {
     // a = f/m
     pb.velocity.x += force.x/pb.mass;
     pb.velocity.y += force.y/pb.mass;
@@ -27,7 +20,6 @@ void velocityRotate(PhysicsBody &pb, Transform2 &t) {
         velocityAngle += 180.0f;
     }
 
-    std::cout << "Angle: " << velocityAngle << "\n";
     t.rot = velocityAngle;
 }
 

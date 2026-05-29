@@ -9,8 +9,8 @@
 inline void handlePlayerInput(GameData &gd) {
     for (PlayerController &pc : gd.playerControllers) {
         unsigned int id = pc.entityId;
-        unsigned int fishBodyIdx = gd.idToFishBodyIdx[id];
-        FishBody &fb = gd.fishBodies[fishBodyIdx];
+        PhysicsBody &pb = gd.physicsBodies[gd.idToPhysicsBodyIdx[id]];
+        FishBody &fb = gd.fishBodies[gd.idToFishBodyIdx[id]];
 
         Vector2 force = {0.0f, 0.0f};
         if (IsKeyDown(pc.rightKey)) force.x += 1;
@@ -28,12 +28,14 @@ inline void handlePlayerInput(GameData &gd) {
         force.x *= fb.swimForce;
         force.y *= fb.swimForce;
 
-        applyForce(gd, id, force);
+        applyForce(pb, force);
     }
 }
 
 inline void addPlayerController(GameData& gd, unsigned int entityId) {
+    // todo: ensure the target has a physics body
     PlayerController pc;
     pc.entityId = entityId;
     gd.playerControllers.push_back(pc);
+    gd.idToPlayerControllerIdx[entityId] = gd.playerControllers.size()-1;
 }

@@ -54,18 +54,12 @@ void drawWorld(GameData &gd) {
     for (const Sprite& s : gd.sprites) {
         const Transform2 &t = gd.idToTransform2[s.entityId];
 
-        // Todo: skip if this sprite is fully offscreen
         drawSprite(s, t);
+        // Todo: implement rippling
+        // rippling includes having the body shimmer, and having the body shift slightly left-right along axis
         // rippleSprite(s);
-    }
-    // unsigned int s = 90;
-    // DrawRectangle((WINDOW_WIDTH/2) - s/2,
-    //               (WINDOW_HEIGHT/2) - s/2,
-    //               s, s, RED);
 
-    // DrawRectangle((WINDOW_WIDTH/2) - 3/2,
-    //               (WINDOW_HEIGHT/2) - 3/2,
-    //               3, 3, BLUE);
+    }
 
     EndDrawing();
 }
