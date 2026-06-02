@@ -19,15 +19,17 @@ constexpr double TICK_INTERVAL = 1/60; // seconds between each tick
 void gameStateInit(GameData &gd) {
     int plantSpacing = WINDOW_WIDTH/(NUM_PLANTS+1);
     float xLocation = plantSpacing;
-    for (int i = 0; i < NUM_PLANTS; i++) {
-        addFlower(gd, {xLocation, WINDOW_HEIGHT/3, 0});
-        xLocation += plantSpacing;
-    }
+    // for (int i = 0; i < NUM_PLANTS; i++) {
+    //     addFlower(gd, {xLocation, WINDOW_HEIGHT/3, 0});
+    //     xLocation += plantSpacing;
+    // }
+
+
 
     unsigned int playerFishId = addFish(gd, {WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 0});
     addPlayerController(gd, playerFishId);
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 1; i++) {
         unsigned int fishId = addFish(gd, {WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 0});
         addAiBrain(gd, fishId);
     }
@@ -35,6 +37,7 @@ void gameStateInit(GameData &gd) {
 
 void gameStateUpdates(GameData &gd, unsigned int tickCount) {
     growPlants(gd);
+    handleFishCollisions(gd);
     aiDecisions(gd, tickCount);
     simulatePhysics(gd);
 }

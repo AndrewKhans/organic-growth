@@ -19,4 +19,5 @@ struct FishBody {
 
     // Cached values
     float swimForce;
+    Vector2 mouthLocation;
 };

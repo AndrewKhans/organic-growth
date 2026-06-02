@@ -7,8 +7,4 @@
 #include "types/sprite.h"
 #include <vector>
 
-// constexpr unsigned int PIXEL_SIZE = 20;
-constexpr unsigned int PIXEL_SIZE = 12;
-
 void drawWorld(GameData &gd);
-
