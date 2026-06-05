@@ -7,4 +7,4 @@
 #include "physics_system.h"
 
 void addAiBrain(GameData& gd, unsigned int entityId);
-void aiDecisions(GameData &gd, unsigned int tickCount);
+void aiDecisions(GameData &gd);

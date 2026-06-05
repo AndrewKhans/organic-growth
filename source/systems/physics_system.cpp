@@ -1,13 +1,16 @@
 #include "physics_system.h"
 #include <cmath>
 
-constexpr float DRAG = 0.8f;
+constexpr float DRAG = 0.87f;
 constexpr float ROTATION_SPEED = 1.0f; // Deg/s
 
-void applyForce(PhysicsBody& pb, Vector2 force) {
+// How to properly add multiple forces? If we already have f1, and we want to add f2, how should that work?
+void applyForce(PhysicsBody &pb, Vector2 force) {
     // a = f/m
     pb.velocity.x += force.x/pb.mass;
     pb.velocity.y += force.y/pb.mass;
+    std::cout << "mass " << pb.mass << "\n";
+    std::cout << "velocity " << pb.velocity.x << ", " << pb.velocity.y << "\n";
 }
 
 /* Nudge the entity's rotation to point towards its velocity */

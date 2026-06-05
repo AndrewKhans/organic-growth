@@ -24,21 +24,19 @@ void gameStateInit(GameData &gd) {
     //     xLocation += plantSpacing;
     // }
 
-
-
     unsigned int playerFishId = addFish(gd, {WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 0});
     addPlayerController(gd, playerFishId);
 
     for (int i = 0; i < 1; i++) {
-        unsigned int fishId = addFish(gd, {WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 0});
+        unsigned int fishId = addFish(gd, {WINDOW_WIDTH/2, WINDOW_HEIGHT/4, 0});
         addAiBrain(gd, fishId);
     }
 }
 
-void gameStateUpdates(GameData &gd, unsigned int tickCount) {
+void gameStateUpdates(GameData &gd) {
     growPlants(gd);
     handleFishCollisions(gd);
-    aiDecisions(gd, tickCount);
+    aiDecisions(gd);
     simulatePhysics(gd);
 }
 
@@ -51,16 +49,14 @@ int main(void)
     gameStateInit(gd);
 
     double lastTickTime = 0.0;
-    unsigned int tickCount = 0;
-
     while (!WindowShouldClose()) {
         double now = GetTime();
         if (now - lastTickTime >= TICK_INTERVAL) {
-            gameStateUpdates(gd, tickCount);
+            gameStateUpdates(gd);
             handlePlayerInput(gd);
             drawWorld(gd);
 
-            tickCount++;
+            gd.currentTick++;
             lastTickTime = now;
         }
     }

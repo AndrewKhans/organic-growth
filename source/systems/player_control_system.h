@@ -18,8 +18,10 @@ inline void handlePlayerInput(GameData &gd) {
         if (IsKeyDown(pc.upKey))    force.y -= 1;
         if (IsKeyDown(pc.downKey))  force.y += 1;
 
-        // Normalize so that moving diagonal is the same speed as cardinal
-        if (force.x != 0 && force.y != 0) {
+        if (force.x == 0 && force.y == 0) {
+            return;
+        } else if (force.x != 0 && force.y != 0) {
+            // Normalize so that moving diagonal is the same speed as cardinal
             force.x *= 0.7071f;
             force.y *= 0.7071f;
         }

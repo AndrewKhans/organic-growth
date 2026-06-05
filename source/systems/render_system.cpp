@@ -15,14 +15,13 @@ void printSprite(const Sprite &s) {
 
 // Note: The coords you pass to DrawRectangle are the top left corner
 // Draw a sprite, starting at the bottom left corner
-
 /*
     Todo: Optimizations
         - Before the loop, use the X/Y and size to determine if we should even start the loop
         - Skip drawing a pixel if it's Y is too high or too low. End the loop if the current pixel is too low, as other
-          pixels will definitely be too low. Apply the same logic to X
+            pixels will definitely be too low. Apply the same logic to X
         - Try finding a line that pixels fall on and use that for placing them, instead of doing a rotation matrix
-          for each
+            for each
         - Try rotating all pixels at the same time using matrix multiplication with a rotation matrix
 */
 void drawSprite(const Sprite &s, const Transform2 &t) {
@@ -32,12 +31,12 @@ void drawSprite(const Sprite &s, const Transform2 &t) {
 
     Vector2 offset = {((float)s.width/2)*PIXEL_SIZE - PIXEL_SIZE/2, ((float)s.height/2)*PIXEL_SIZE - PIXEL_SIZE/2};
     float rot = t.rot - 180;
-    float rads = rot * (PI / 180);
+    float rads = rot * (PI/180);
     for (unsigned int y = 0; y < s.height; y++) {
         float yCoord = y*PIXEL_SIZE - offset.y;
         for (unsigned int x = 0; x < s.width; x++) {
             Color c = s.pixels[x + y*s.width];
-            if IS_BLANK(c) continue;
+            if (IS_BLANK(c)) continue;
 
             float xCoord = x*PIXEL_SIZE - offset.x;
             pixel.x = t.x + (xCoord*cosf(rads) - yCoord*sinf(rads));
@@ -58,7 +57,6 @@ void drawWorld(GameData &gd) {
         // Todo: implement rippling
         // rippling includes having the body shimmer, and having the body shift slightly left-right along axis
         // rippleSprite(s);
-
     }
 
     EndDrawing();

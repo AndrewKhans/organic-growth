@@ -17,6 +17,9 @@ struct FishBody {
     unsigned int width  = FISH_BODY_SIZE;
     unsigned int height = FISH_BODY_SIZE;
 
+    // Collision system
+    unsigned int lastCollision = 0;
+
     // Cached values
     float swimForce;
     Vector2 mouthLocation;

@@ -46,15 +46,15 @@ void randomFishMovement(PhysicsBody& pb, const FishBody& fb) {
     applyForce(pb, force);
 }
 
-void aiDecisions(GameData &gd, unsigned int tickCount) {
+void aiDecisions(GameData &gd) {
     for (AiBrain &ai : gd.aiBrains) {
         unsigned int id = ai.entityId;
         const FishBody& fb = gd.fishBodies[gd.idToFishBodyIdx[id]];
         PhysicsBody &pb = gd.physicsBodies[gd.idToPhysicsBodyIdx[id]];
 
-        if (tickCount - ai.lastMovementTick > 120) {
-            randomFishMovement(pb, fb);
-            ai.lastMovementTick = tickCount;
+        if (gd.currentTick - ai.lastMovementTick > 120) {
+            // randomFishMovement(pb, fb);
+            ai.lastMovementTick = gd.currentTick;
         }
     }
 }

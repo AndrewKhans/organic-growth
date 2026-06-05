@@ -9,7 +9,6 @@ enum class AiTask : unsigned char {
     FOLLOW,
 };
 
-
 struct AiBrain {
     unsigned int entityId;
 

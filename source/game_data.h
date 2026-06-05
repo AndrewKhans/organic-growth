@@ -11,6 +11,7 @@
 #include "types/ai_brain.h"
 
 struct GameData {
+    unsigned int currentTick = 0;
     unsigned int nextEntityId = 0;
 
     // std::vector<Transform2> transforms;

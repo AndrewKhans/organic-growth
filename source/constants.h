@@ -26,7 +26,7 @@ static inline float dist2d(Vector2 v1, Vector2 v2) {
 static inline Vector2 localToWorldCoords(const Vector2 &localCoords, const Vector2 &size, const Transform2 &t) {
     Vector2 offset = {(size.x/2)*PIXEL_SIZE - PIXEL_SIZE/2, (size.y/2)*PIXEL_SIZE - PIXEL_SIZE/2};
     float rot = t.rot - 180.0f;
-    float rads = rot * (PI / 180);
+    float rads = rot * (PI/180);
     float xCoord = localCoords.x*PIXEL_SIZE - offset.x;
     float yCoord = localCoords.y*PIXEL_SIZE - offset.y + 10;
 
@@ -35,6 +35,12 @@ static inline Vector2 localToWorldCoords(const Vector2 &localCoords, const Vecto
     worldCoords.y = t.y + (xCoord*sinf(rads) + yCoord*cosf(rads));
 
     return worldCoords;
+}
+
+/* Return the unit vector with an angle equal to `degrees` */
+static inline Vector2 rotationToUnitVector(float degrees) {
+    float radians = degrees * (PI/180);
+    return {cosf(radians), sinf(radians)};
 }
 
 static inline int randInt(int min, int max) {
